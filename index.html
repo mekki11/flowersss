@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bloom & Co — Kwiaty, które robią “wow”</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0b0b10;
+      --card: rgba(255,255,255,.06);
+      --stroke: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --accent:#ff4da6;
+      --shadow: 0 30px 80px rgba(0,0,0,.45);
+      --radius: 22px;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x:hidden;
+      line-height:1.5;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{width:min(1150px, 92%); margin:0 auto}
+    .glass{
+      background: var(--card);
+      border:1px solid var(--stroke);
+      border-radius: var(--radius);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+    }
+    .title{font-family:"Playfair Display",serif;letter-spacing:.2px}
+    .muted{color:var(--muted)}
+    .small{font-size:13px;color:var(--muted)}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      white-space:nowrap;
+    }
+    .btn{
+      cursor:pointer; border:none;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      color: #101018;
+      background: linear-gradient(135deg, var(--accent), #ff89c8);
+      transition: transform .18s ease, filter .18s ease;
+      display:inline-flex; align-items:center; gap:10px;
+      box-shadow: 0 18px 45px rgba(255,77,166,.25);
+    }
+    .btn:hover{transform: translateY(-2px); filter: brightness(1.03)}
+    .btn:active{transform: translateY(0) scale(.98)}
+    .btn.secondary{
+      color: var(--text);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow:none;
+    }
+    .iconbtn{
+      border:none; cursor:pointer;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-weight: 800;
+      display:inline-flex; align-items:center; gap:10px;
+    }
+
+    /* Background */
+    .bg{
+      position:fixed; inset:0; z-index:-3;
+      background:
+        radial-gradient(900px 600px at 12% 18%, rgba(255,77,166,.22), transparent 55%),
+        radial-gradient(820px 520px at 40% 88%, rgba(255,255,255,.10), transparent 55%),
+        linear-gradient(180deg, #0b0b10, #07070b);
+    }
+
+    /* Topbar */
+    .topbar{
+      position: sticky; top:0; z-index: 50;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(11,11,16,.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .topbar-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 0;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight: 900;
+      letter-spacing: .4px;
+    }
+    .logo{
+      width: 34px; height: 34px; border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255,77,166,1), rgba(255,137,200,1));
+      box-shadow: 0 18px 45px rgba(255,77,166,.18);
+    }
+    .actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    select.lang{
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-weight: 800;
+      outline: none;
+      cursor: pointer;
+    }
+    select.lang option{ color:#111; }
+
+    /* Hero */
+    .hero{padding: 56px 0 26px}
+    .hero-card{
+      padding: 34px 26px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      align-items: center;
+      overflow:hidden;
+      position: relative;
+    }
+    .hero-card:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(800px 380px at 20% 20%, rgba(255,77,166,.22), transparent 55%),
+        radial-gradient(700px 360px at 80% 55%, rgba(255,255,255,.10), transparent 55%);
+      z-index:0;
+      pointer-events:none;
+    }
+    .hero-left, .hero-right{position:relative; z-index:1}
+    .hero h1{
+      font-size: clamp(34px, 4vw, 56px);
+      line-height:1.05;
+      margin: 12px 0 12px;
+    }
+    .hero .sub{
+      font-size: 16px;
+      color: rgba(255,255,255,.82);
+      max-width: 54ch;
+    }
+    .hero-ctas{display:flex; gap:10px; flex-wrap:wrap; margin-top: 16px}
+    .points{display:flex; gap:10px; flex-wrap:wrap; margin-top: 16px}
+    .hero-right{display:grid; gap:12px}
+    .hero-photo{
+      height: 210px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(135deg, rgba(255,77,166,.35), rgba(255,137,200,.20)),
+        url('https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1400&q=60') center/cover no-repeat;
+      filter: saturate(1.05) contrast(1.02);
+      box-shadow: 0 25px 70px rgba(0,0,0,.35);
+    }
+    .preview{
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .preview .row{display:flex; align-items:center; justify-content:space-between; gap:12px}
+    .stat{display:flex; flex-direction:column; gap:3px}
+    .stat b{font-size:18px}
+    .stat span{font-size:13px; color: rgba(255,255,255,.72)}
+
+    /* Sections */
+    section{padding: 26px 0}
+    .section-head{
+      display:flex; align-items:flex-end; justify-content:space-between; gap: 12px;
+      margin: 22px 0 14px;
+      flex-wrap:wrap;
+    }
+    .section-head h2{font-size:28px}
+    .section-head p{max-width:60ch}
+
+    /* Product grid */
+    .cards{display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px}
+    .card{
+      padding: 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover{transform: translateY(-3px); background: rgba(255,255,255,.075); border-color: rgba(255,255,255,.16)}
+    .card .img{
+      height: 190px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background-size: cover;
+      background-position:center;
+      margin-bottom: 12px;
+    }
+    .badge{
+      position:absolute;
+      top: 12px; left: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.45);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight: 900;
+      font-size: 12px;
+      backdrop-filter: blur(10px);
+    }
+    .card h3{font-size:16px;margin-bottom:6px}
+    .meta{display:flex; gap:10px; flex-wrap:wrap; margin: 10px 0 12px}
+    .meta .tag{
+      font-size:12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.82);
+    }
+    .rating{
+      display:flex; align-items:center; gap:10px;
+      color: rgba(255,255,255,.86);
+      font-size: 13px;
+    }
+    .stars{letter-spacing:2px}
+    .price{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,.10);
+    }
+    .price b{font-size:18px}
+    .miniBtn{
+      border:none; cursor:pointer;
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.16);
+      color: var(--text);
+    }
+    .miniBtn:hover{background: rgba(255,255,255,.16)}
+
+    /* Offer */
+    .offer{
+      padding: 16px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+
+    /* Reviews */
+    .reviews{display:grid; grid-template-columns: 1.1fr .9fr; gap: 14px}
+    .reviewCard{padding: 16px}
+    .who{display:flex; align-items:center; gap:10px; margin-top: 12px}
+    .avatar{
+      width: 38px; height: 38px; border-radius: 999px;
+      background: linear-gradient(135deg, rgba(255,77,166,.9), rgba(255,137,200,.7));
+    }
+
+    /* Sticky bar */
+    .sticky{
+      position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 55;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(11,11,16,.62);
+      border: 1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(16px);
+      display:flex; align-items:center; justify-content:space-between; gap: 10px;
+      flex-wrap:wrap;
+    }
+    .sticky .left{display:flex; flex-direction:column; gap:3px}
+    .sticky .right{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .counter{
+      padding: 10px 12px; border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      font-weight: 900;
+    }
+
+    /* Toast */
+    .toast{
+      position: fixed; right: 16px; bottom: 86px; z-index: 60;
+      max-width: 420px;
+      display:none;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(12px);
+    }
+    .toast.show{display:block; animation: pop .22s ease}
+    @keyframes pop{from{transform: translateY(10px); opacity:0} to{transform: translateY(0); opacity:1}}
+
+    /* Cart modal */
+    .modal{
+      position:fixed; inset:0; z-index:80;
+      display:none; place-items:center;
+      padding: 16px;
+    }
+    .modal.open{display:grid}
+    .backdrop{position:absolute; inset:0; background: rgba(0,0,0,.62)}
+    .modal-card{
+      position:relative;
+      width:min(760px, 94%);
+      padding: 16px;
+      border-radius: 22px;
+    }
+    .modal-head{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      padding: 8px 8px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .close{
+      width: 42px; height: 42px;
+      border-radius: 14px;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      font-weight: 900;
+    }
+    .cart-list{padding: 12px 8px; display:grid; gap:10px; max-height: 42vh; overflow:auto}
+    .cart-item{
+      display:flex; justify-content:space-between; align-items:center; gap:12px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .cart-item b{font-size:14px}
+    .remove{
+      border:none; cursor:pointer;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.14);
+      color: var(--text);
+      font-weight: 900;
+    }
+    .modal-foot{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      padding: 12px 8px 6px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      flex-wrap:wrap;
+    }
+
+    @media (max-width: 980px){
+      .hero-card{grid-template-columns:1fr; padding: 26px 18px}
+      .cards{grid-template-columns: 1fr}
+      .reviews{grid-template-columns: 1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg"></div>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar-inner">
+        <div class="brand">
+          <div class="logo"></div>
+          <div>
+            <div id="brandName">Bloom & Co</div>
+            <div class="small" id="brandTag"></div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <select class="lang" id="langSelect" aria-label="Language">
+            <option value="pl">PL</option>
+            <option value="uk">UKR</option>
+            <option value="ru">RU</option>
+          </select>
+
+          <button class="iconbtn" id="cartBtn">
+            <span id="cartLabel"></span>: <span id="cartCount">0</span>
+          </button>
+
+          <a class="btn" href="#bouquets" id="ctaTop"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-card glass">
+        <div class="hero-left">
+          <span class="pill" id="heroPill"></span>
+          <h1 class="title" id="heroTitle"></h1>
+          <p class="sub" id="heroSub"></p>
+
+          <div class="hero-ctas">
+            <a class="btn" href="#bouquets" id="ctaHero"></a>
+            <button class="btn secondary" id="scrollOfferBtn"></button>
+          </div>
+
+          <div class="points">
+            <span class="pill" id="p1"></span>
+            <span class="pill" id="p2"></span>
+            <span class="pill" id="p3"></span>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-photo" aria-label="flowers"></div>
+          <div class="preview">
+            <div class="row">
+              <div class="stat"><b id="statA">4.9/5</b><span id="statALabel"></span></div>
+              <div class="stat" style="text-align:right"><b id="statB">2 300+</b><span id="statBLabel"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PRODUCTS -->
+  <section id="bouquets">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 class="title" id="prodTitle"></h2>
+          <p class="muted" id="prodSub"></p>
+        </div>
+        <span class="pill" id="prodPill"></span>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <div class="badge" id="b1"></div>
+          <div class="img" style="background-image:url('https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=1400&q=60')"></div>
+          <h3 id="n1"></h3>
+          <div class="rating"><span class="stars">★★★★★</span><span id="r1"></span><span class="muted" id="r1b"></span></div>
+          <div class="meta">
+            <span class="tag" id="t11"></span><span class="tag" id="t12"></span><span class="tag" id="t13"></span>
+          </div>
+          <div class="price">
+            <b class="priceVal" data-price="199"></b>
+            <button class="miniBtn addBtn" data-name="Pink Aura" data-price="199" id="add1"></button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="badge" id="b2"></div>
+          <div class="img" style="background-image:url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=60')"></div>
+          <h3 id="n2"></h3>
+          <div class="rating"><span class="stars">★★★★★</span><span id="r2"></span><span class="muted" id="r2b"></span></div>
+          <div class="meta">
+            <span class="tag" id="t21"></span><span class="tag" id="t22"></span><span class="tag" id="t23"></span>
+          </div>
+          <div class="price">
+            <b class="priceVal" data-price="139"></b>
+            <button class="miniBtn addBtn" data-name="Soft Sorry" data-price="139" id="add2"></button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="badge" id="b3"></div>
+          <div class="img" style="background-image:url('https://images.unsplash.com/photo-1524593249331-9a9f2b4f8d2b?auto=format&fit=crop&w=1400&q=60')"></div>
+          <h3 id="n3"></h3>
+          <div class="rating"><span class="stars">★★★★★</span><span id="r3"></span><span class="muted" id="r3b"></span></div>
+          <div class="meta">
+            <span class="tag" id="t31"></span><span class="tag" id="t32"></span><span class="tag" id="t33"></span>
+          </div>
+          <div class="price">
+            <b class="priceVal" data-price="259"></b>
+            <button class="miniBtn addBtn" data-name="Queen Energy" data-price="259" id="add3"></button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFER -->
+  <section id="offer">
+    <div class="container">
+      <div class="offer glass">
+        <div>
+          <div class="pill" id="offerPill"></div>
+          <h2 class="title" style="margin-top:10px;" id="offerTitle"></h2>
+          <p class="muted" style="margin-top:8px;max-width:70ch;" id="offerText"></p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
+          <a class="btn" href="#bouquets" id="offerCta"></a>
+          <button class="btn secondary" id="toastBtn"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="proof">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 class="title" id="revTitle"></h2>
+          <p class="muted" id="revSub"></p>
+        </div>
+        <span class="pill" id="revPill"></span>
+      </div>
+
+      <div class="reviews">
+        <div class="reviewCard glass">
+          <div class="pill" id="rv1pill"></div>
+          <div style="margin-top:10px;font-size:18px;font-weight:800;" id="rv1title"></div>
+          <p class="muted" style="margin-top:10px;" id="rv1text"></p>
+          <div class="who">
+            <div class="avatar"></div>
+            <div>
+              <div style="font-weight:900;" id="rv1name"></div>
+              <div class="small" id="rv1meta"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reviewCard glass">
+          <div class="pill" id="rv2pill"></div>
+          <div style="margin-top:10px;font-size:18px;font-weight:800;" id="rv2title"></div>
+          <p class="muted" style="margin-top:10px;" id="rv2text"></p>
+          <div class="who">
+            <div class="avatar"></div>
+            <div>
+              <div style="font-weight:900;" id="rv2name"></div>
+              <div class="small" id="rv2meta"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="padding:36px 0 90px;border-top:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.78);">
+    <div class="container" style="display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;">
+      <div>
+        <div class="title" style="font-size:22px;">Bloom & Co</div>
+        <div class="small" style="margin-top:8px;" id="footLeft"></div>
+      </div>
+      <div>
+        <div style="font-weight:900;" id="footRightTitle"></div>
+        <div class="small" style="margin-top:8px;">WhatsApp/Telegram: +48 000 000 000</div>
+        <div class="small">Email: hello@bloomco.pl</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sticky checkout bar -->
+  <div class="sticky">
+    <div class="left">
+      <div style="font-weight:900;" id="stickyTitle"></div>
+      <div class="small" id="stickySub"></div>
+    </div>
+    <div class="right">
+      <div class="counter"><span id="stickyCountLabel"></span>: <span id="cartCount2">0</span></div>
+      <button class="btn" id="checkoutBtn"></button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Cart Modal -->
+  <div class="modal" id="cartModal" aria-hidden="true">
+    <div class="backdrop" id="cartBackdrop"></div>
+    <div class="modal-card glass">
+      <div class="modal-head">
+        <div>
+          <div class="title" style="font-size:20px;" id="modalTitle"></div>
+          <div class="small" id="modalSub"></div>
+        </div>
+        <button class="close" id="cartClose">✕</button>
+      </div>
+
+      <div class="cart-list" id="cartList"></div>
+
+      <div class="modal-foot">
+        <div style="font-weight:900;"><span id="totalLabel"></span>: <span id="cartTotal">0 zł</span></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
+          <button class="btn secondary" id="clearCartBtn"></button>
+          <button class="btn" id="modalCheckoutBtn"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- I18N ----------
+    const i18n = {
+      pl: {
+        brandTag: "kwiaty, które trafiają w punkt",
+        cartLabel: "🛒 Koszyk",
+        ctaTop: "Wybierz bukiet →",
+        heroPill: "🚚 Dostawa dziś • 60–120 min • Zdjęcie przed wysyłką",
+        heroTitle: `Kwiaty, które mówią za Ciebie — <span style="color:#ff4da6">bez słów</span>`,
+        heroSub: "Gotowe kompozycje + bukiet pod okazję. Eleganckie pakowanie, kartka gratis, dostawa na czas.",
+        ctaHero: "Zobacz bukiety →",
+        scrollOfferBtn: "Chcę taniej",
+        p1: "💌 Kartka 0 zł",
+        p2: "🎁 Premium pakowanie",
+        p3: "✅ 4.9/5 z opinii",
+        statALabel: "średnia ocena",
+        statBLabel: "zamówień w tym roku",
+        prodTitle: "Bukiety z cenami i oceną",
+        prodSub: "Szybki wybór: okazja → styl → cena → do koszyka.",
+        prodPill: "⚡ Dziś najczęściej: róże + piwonie + eukaliptus",
+        b1: "🔥 Hit",
+        n1: "“Pink Aura” — piwonie + róże",
+        r1: "4.9 (318)",
+        r1b: "• Premium",
+        t11: "Randka",
+        t12: "Delikatnie",
+        t13: "Foto przed wysyłką",
+        add1: "+ Do koszyka",
+        b2: "💌 Przepraszam",
+        n2: "“Soft Sorry” — tulipany + eukaliptus",
+        r2: "4.8 (204)",
+        r2b: "• Trend",
+        t21: "Powiedzieć „przepraszam”",
+        t22: "Lekki styl",
+        t23: "Kartka gratis",
+        add2: "+ Do koszyka",
+        b3: "✨ Premium",
+        n3: "“Queen Energy” — 25 róż",
+        r3: "4.9 (512)",
+        r3b: "• Efekt WOW",
+        t31: "Urodziny",
+        t32: "Zrobić wrażenie",
+        t33: "Dostawa na czas",
+        add3: "+ Do koszyka",
+        offerPill: "🎁 Oferta",
+        offerTitle: "Kartka + premium pakowanie gratis dziś",
+        offerText: "Dodamy kartkę z Twoim tekstem, pięknie zapakujemy i wyślemy zdjęcie bukietu przed dostawą.",
+        offerCta: "Wybierz bukiet →",
+        toastBtn: "Pokaż bonus",
+        revTitle: "Opinie (social proof)",
+        revSub: "Zbijamy obiekcje: jakość, dostawa, „jak na zdjęciu”.",
+        revPill: "⭐ 4.9/5 • 1 174 opinii",
+        rv1pill: "„jak na zdjęciu” ✅",
+        rv1title: "„Dostawa idealnie na czas. Bukiet — WOW!”",
+        rv1text: "Zamówienie na rocznicę. Dostałem zdjęcie przed wysyłką, wszystko dopięte. Pakowanie jak z Pinterest.",
+        rv1name: "Kacper",
+        rv1meta: "★★★★★ • 2 dni temu",
+        rv2pill: "dostawa 90 min ⚡",
+        rv2title: "„Ratują sytuację w ostatniej chwili”",
+        rv2text: "Zamówiłem w ostatniej chwili — dojechało szybko i pięknie. Udało się 😅",
+        rv2name: "Michał",
+        rv2meta: "★★★★★ • tydzień temu",
+        footLeft: "Kwiaty • Premium pakowanie • Zdjęcie przed wysyłką • Dostawa na czas",
+        footRightTitle: "Kontakt",
+        stickyTitle: "Gotowe? Zamów w 2 kliknięcia",
+        stickySub: "Kartka + premium pakowanie gratis dziś",
+        stickyCountLabel: "W koszyku",
+        checkoutBtn: "Zamów →",
+        modalTitle: "Twój koszyk",
+        modalSub: "Demo: bez płatności (możesz podłączyć później)",
+        totalLabel: "Suma",
+        clearCartBtn: "Wyczyść",
+        modalCheckoutBtn: "Zamów →",
+        toastBonus: "🎁 Dziś bonus: <b>kartka + premium pakowanie</b> gratis + zdjęcie przed wysyłką",
+        toastEmpty: "⚠️ Koszyk pusty — dodaj bukiet",
+        toastAdded: (name, price) => `✅ Dodano <b>${name}</b> — ${price}`,
+        toastRemoved: "🗑️ Usunięto z koszyka",
+        toastCleared: "🧼 Koszyk wyczyszczony",
+        toastOrdered: (total) => `🧾 Zamówienie (demo). Suma: <b>${total}</b>`
+      },
+
+      uk: {
+        brandTag: "квіти, що влучають у саме серце",
+        cartLabel: "🛒 Кошик",
+        ctaTop: "Обрати букет →",
+        heroPill: "🚚 Доставка сьогодні • 60–120 хв • Фото перед відправкою",
+        heroTitle: `Квіти, які говорять замість тебе — <span style="color:#ff4da6">без слів</span>`,
+        heroSub: "Готові композиції + букет під подію. Преміум пакування, листівка безкоштовно, доставка вчасно.",
+        ctaHero: "Дивитись букети →",
+        scrollOfferBtn: "Хочу вигідніше",
+        p1: "💌 Листівка 0 zł",
+        p2: "🎁 Преміум пакування",
+        p3: "✅ 4.9/5 за відгуками",
+        statALabel: "середня оцінка",
+        statBLabel: "замовлень цього року",
+        prodTitle: "Букети з цінами та рейтингом",
+        prodSub: "Швидкий вибір: подія → стиль → ціна → у кошик.",
+        prodPill: "⚡ Сьогодні найчастіше: троянди + півонії + евкаліпт",
+        b1: "🔥 Хіт",
+        n1: "“Pink Aura” — півонії + троянди",
+        r1: "4.9 (318)",
+        r1b: "• Преміум",
+        t11: "Побачення",
+        t12: "Ніжно",
+        t13: "Фото перед відправкою",
+        add1: "+ У кошик",
+        b2: "💌 Вибач",
+        n2: "“Soft Sorry” — тюльпани + евкаліпт",
+        r2: "4.8 (204)",
+        r2b: "• Тренд",
+        t21: "Сказати «пробач»",
+        t22: "Легкий стиль",
+        t23: "Листівка безкоштовно",
+        add2: "+ У кошик",
+        b3: "✨ Преміум",
+        n3: "“Queen Energy” — 25 троянд",
+        r3: "4.9 (512)",
+        r3b: "• WOW-ефект",
+        t31: "День народження",
+        t32: "Вразити",
+        t33: "Доставка вчасно",
+        add3: "+ У кошик",
+        offerPill: "🎁 Офер",
+        offerTitle: "Листівка + преміум пакування безкоштовно сьогодні",
+        offerText: "Додамо листівку з вашим текстом, красиво запакуємо і надішлемо фото букета перед доставкою.",
+        offerCta: "Обрати букет →",
+        toastBtn: "Показати бонус",
+        revTitle: "Відгуки (social proof)",
+        revSub: "Знімаємо сумніви: якість, доставка, «як на фото».",
+        revPill: "⭐ 4.9/5 • 1 174 відгуки",
+        rv1pill: "«як на фото» ✅",
+        rv1title: "«Доставили рівно вчасно. Букет — вау!»",
+        rv1text: "Замовляв на річницю. Отримав фото перед відправкою — все ідеально. Пакування як з Pinterest.",
+        rv1name: "Артем",
+        rv1meta: "★★★★★ • 2 дні тому",
+        rv2pill: "доставка 90 хв ⚡",
+        rv2title: "«Виручили в останній момент»",
+        rv2text: "Замовив в останню хвилину — приїхало швидко і красиво. Вдалося 😅",
+        rv2name: "Данило",
+        rv2meta: "★★★★★ • тиждень тому",
+        footLeft: "Квіти • Преміум пакування • Фото перед відправкою • Доставка вчасно",
+        footRightTitle: "Контакти",
+        stickyTitle: "Готово? Оформи в 2 кліки",
+        stickySub: "Листівка + преміум пакування безкоштовно сьогодні",
+        stickyCountLabel: "У кошику",
+        checkoutBtn: "Оформити →",
+        modalTitle: "Ваш кошик",
+        modalSub: "Демо: без оплати (можна підключити пізніше)",
+        totalLabel: "Разом",
+        clearCartBtn: "Очистити",
+        modalCheckoutBtn: "Оформити →",
+        toastBonus: "🎁 Сьогодні бонус: <b>листівка + преміум пакування</b> безкоштовно + фото перед відправкою",
+        toastEmpty: "⚠️ Кошик порожній — додайте букет",
+        toastAdded: (name, price) => `✅ Додано <b>${name}</b> — ${price}`,
+        toastRemoved: "🗑️ Видалено з кошика",
+        toastCleared: "🧼 Кошик очищено",
+        toastOrdered: (total) => `🧾 Замовлення (демо). Разом: <b>${total}</b>`
+      },
+
+      ru: {
+        brandTag: "цветы, которые “в точку”",
+        cartLabel: "🛒 Корзина",
+        ctaTop: "Выбрать букет →",
+        heroPill: "🚚 Доставка сегодня • 60–120 мин • Фото перед отправкой",
+        heroTitle: `Цветы, которые говорят за тебя — <span style="color:#ff4da6">без слов</span>`,
+        heroSub: "Готовые композиции + букет под повод. Премиум упаковка, открытка бесплатно, доставка ко времени.",
+        ctaHero: "Смотреть букеты →",
+        scrollOfferBtn: "Хочу выгоднее",
+        p1: "💌 Открытка 0 zł",
+        p2: "🎁 Премиум упаковка",
+        p3: "✅ 4.9/5 по отзывам",
+        statALabel: "средняя оценка",
+        statBLabel: "заказов в этом году",
+        prodTitle: "Букеты с ценами и рейтингом",
+        prodSub: "Быстрый выбор: повод → стиль → цена → в корзину.",
+        prodPill: "⚡ Сегодня чаще всего: розы + пионы + эвкалипт",
+        b1: "🔥 Хит",
+        n1: "“Pink Aura” — пионы + розы",
+        r1: "4.9 (318)",
+        r1b: "• Премиум",
+        t11: "Свидание",
+        t12: "Нежно",
+        t13: "Фото перед отправкой",
+        add1: "+ В корзину",
+        b2: "💌 Извини",
+        n2: "“Soft Sorry” — тюльпаны + эвкалипт",
+        r2: "4.8 (204)",
+        r2b: "• Тренд",
+        t21: "Сказать «прости»",
+        t22: "Лёгкий стиль",
+        t23: "Открытка бесплатно",
+        add2: "+ В корзину",
+        b3: "✨ Премиум",
+        n3: "“Queen Energy” — 25 роз",
+        r3: "4.9 (512)",
+        r3b: "• Вау-эффект",
+        t31: "День рождения",
+        t32: "Впечатлить",
+        t33: "Доставка ко времени",
+        add3: "+ В корзину",
+        offerPill: "🎁 Офер",
+        offerTitle: "Открытка + премиум упаковка бесплатно сегодня",
+        offerText: "Добавим открытку с вашим текстом, красиво упакуем и пришлём фото букета перед доставкой.",
+        offerCta: "Выбрать букет →",
+        toastBtn: "Показать бонус",
+        revTitle: "Отзывы (social proof)",
+        revSub: "Убираем сомнения: качество, доставка, «как на фото».",
+        revPill: "⭐ 4.9/5 • 1 174 отзывов",
+        rv1pill: "«как на фото» ✅",
+        rv1title: "«Привезли ровно ко времени. Букет — вау!»",
+        rv1text: "Заказывал на годовщину. Прислали фото перед отправкой — всё идеально. Упаковка как из Pinterest.",
+        rv1name: "Илья",
+        rv1meta: "★★★★★ • 2 дня назад",
+        rv2pill: "доставка 90 мин ⚡",
+        rv2title: "«Выручили в последний момент»",
+        rv2text: "Заказал в последний момент — приехало быстро и красиво. Сработало 😅",
+        rv2name: "Денис",
+        rv2meta: "★★★★★ • неделю назад",
+        footLeft: "Цветы • Премиум упаковка • Фото перед отправкой • Доставка ко времени",
+        footRightTitle: "Контакты",
+        stickyTitle: "Готово? Оформи в 2 клика",
+        stickySub: "Открытка + премиум упаковка бесплатно сегодня",
+        stickyCountLabel: "В корзине",
+        checkoutBtn: "Оформить →",
+        modalTitle: "Ваша корзина",
+        modalSub: "Демо: без оплаты (можно подключить позже)",
+        totalLabel: "Итого",
+        clearCartBtn: "Очистить",
+        modalCheckoutBtn: "Оформить →",
+        toastBonus: "🎁 Сегодня бонус: <b>открытка + премиум упаковка</b> бесплатно + фото перед отправкой",
+        toastEmpty: "⚠️ Корзина пустая — добавь букет",
+        toastAdded: (name, price) => `✅ Добавили <b>${name}</b> — ${price}`,
+        toastRemoved: "🗑️ Удалено из корзины",
+        toastCleared: "🧼 Корзина очищена",
+        toastOrdered: (total) => `🧾 Заказ (демо). Итого: <b>${total}</b>`
+      }
+    };
+
+    // ---------- HELPERS ----------
+    const qs = (s)=>document.querySelector(s);
+    const qsa = (s)=>document.querySelectorAll(s);
+
+    // PLN formatter
+    const money = new Intl.NumberFormat('pl-PL', { style:'currency', currency:'PLN' });
+
+    // ---------- STATE ----------
+    let cart = [];
+
+    // ---------- UI ----------
+    const cartCountEl  = qs('#cartCount');
+    const cartCountEl2 = qs('#cartCount2');
+    const toast = qs('#toast');
+
+    const cartBtn = qs('#cartBtn');
+    const cartModal = qs('#cartModal');
+    const cartClose = qs('#cartClose');
+    const cartBackdrop = qs('#cartBackdrop');
+    const cartList = qs('#cartList');
+    const cartTotal = qs('#cartTotal');
+    const clearCartBtn = qs('#clearCartBtn');
+
+    const checkoutBtn = qs('#checkoutBtn');
+    const modalCheckoutBtn = qs('#modalCheckoutBtn');
+    const toastBtn = qs('#toastBtn');
+    const scrollOfferBtn = qs('#scrollOfferBtn');
+
+    const langSelect = qs('#langSelect');
+
+    // ---------- FUNCTIONS ----------
+    function showToast(html){
+      toast.innerHTML = html;
+      toast.classList.add('show');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(()=>toast.classList.remove('show'), 2600);
+    }
+
+    function updatePrices(){
+      qsa('.priceVal').forEach(el=>{
+        const p = Number(el.dataset.price);
+        el.textContent = money.format(p);
+      });
+    }
+
+    function updateCartUI(){
+      cartCountEl.textContent = cart.length;
+      cartCountEl2.textContent = cart.length;
+
+      const lang = langSelect.value;
+      const t = i18n[lang];
+
+      if(cart.length === 0){
+        cartList.innerHTML = `<div class="small">${t.toastEmpty}</div>`;
+      } else {
+        cartList.innerHTML = cart.map((item, i)=>`
+          <div class="cart-item">
+            <div>
+              <b>${item.name}</b>
+              <div class="small">${money.format(item.price)}</div>
+            </div>
+            <button class="remove" data-remove="${i}">✕</button>
+          </div>
+        `).join('');
+      }
+
+      const total = cart.reduce((s, x)=> s + x.price, 0);
+      cartTotal.textContent = money.format(total);
+
+      qsa('[data-remove]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const idx = Number(btn.getAttribute('data-remove'));
+          cart.splice(idx, 1);
+          updateCartUI();
+          showToast(i18n[lang].toastRemoved);
+        });
+      });
+    }
+
+    function openCart(){
+      cartModal.classList.add('open');
+      cartModal.setAttribute('aria-hidden','false');
+      updateCartUI();
+    }
+    function closeCart(){
+      cartModal.classList.remove('open');
+      cartModal.setAttribute('aria-hidden','true');
+    }
+
+    function setLang(lang){
+      const t = i18n[lang];
+      document.documentElement.lang = lang;
+
+      qs('#brandTag').textContent = t.brandTag;
+      qs('#cartLabel').textContent = t.cartLabel;
+      qs('#ctaTop').textContent = t.ctaTop;
+
+      qs('#heroPill').textContent = t.heroPill;
+      qs('#heroTitle').innerHTML = t.heroTitle;
+      qs('#heroSub').textContent = t.heroSub;
+
+      qs('#ctaHero').textContent = t.ctaHero;
+      qs('#scrollOfferBtn').textContent = t.scrollOfferBtn;
+
+      qs('#p1').textContent = t.p1;
+      qs('#p2').textContent = t.p2;
+      qs('#p3').textContent = t.p3;
+
+      qs('#statALabel').textContent = t.statALabel;
+      qs('#statBLabel').textContent = t.statBLabel;
+
+      qs('#prodTitle').textContent = t.prodTitle;
+      qs('#prodSub').textContent = t.prodSub;
+      qs('#prodPill').textContent = t.prodPill;
+
+      qs('#b1').textContent = t.b1; qs('#n1').textContent = t.n1; qs('#r1').textContent = t.r1; qs('#r1b').textContent = t.r1b;
+      qs('#t11').textContent = t.t11; qs('#t12').textContent = t.t12; qs('#t13').textContent = t.t13;
+      qs('#add1').textContent = t.add1;
+
+      qs('#b2').textContent = t.b2; qs('#n2').textContent = t.n2; qs('#r2').textContent = t.r2; qs('#r2b').textContent = t.r2b;
+      qs('#t21').textContent = t.t21; qs('#t22').textContent = t.t22; qs('#t23').textContent = t.t23;
+      qs('#add2').textContent = t.add2;
+
+      qs('#b3').textContent = t.b3; qs('#n3').textContent = t.n3; qs('#r3').textContent = t.r3; qs('#r3b').textContent = t.r3b;
+      qs('#t31').textContent = t.t31; qs('#t32').textContent = t.t32; qs('#t33').textContent = t.t33;
+      qs('#add3').textContent = t.add3;
+
+      qs('#offerPill').textContent = t.offerPill;
+      qs('#offerTitle').textContent = t.offerTitle;
+      qs('#offerText').textContent = t.offerText;
+      qs('#offerCta').textContent = t.offerCta;
+      qs('#toastBtn').textContent = t.toastBtn;
+
+      qs('#revTitle').textContent = t.revTitle;
+      qs('#revSub').textContent = t.revSub;
+      qs('#revPill').textContent = t.revPill;
+
+      qs('#rv1pill').textContent = t.rv1pill;
+      qs('#rv1title').textContent = t.rv1title;
+      qs('#rv1text').textContent = t.rv1text;
+      qs('#rv1name').textContent = t.rv1name;
+      qs('#rv1meta').textContent = t.rv1meta;
+
+      qs('#rv2pill').textContent = t.rv2pill;
+      qs('#rv2title').textContent = t.rv2title;
+      qs('#rv2text').textContent = t.rv2text;
+      qs('#rv2name').textContent = t.rv2name;
+      qs('#rv2meta').textContent = t.rv2meta;
+
+      qs('#footLeft').textContent = t.footLeft;
+      qs('#footRightTitle').textContent = t.footRightTitle;
+
+      qs('#stickyTitle').textContent = t.stickyTitle;
+      qs('#stickySub').textContent = t.stickySub;
+      qs('#stickyCountLabel').textContent = t.stickyCountLabel;
+      qs('#checkoutBtn').textContent = t.checkoutBtn;
+
+      qs('#modalTitle').textContent = t.modalTitle;
+      qs('#modalSub').textContent = t.modalSub;
+      qs('#totalLabel').textContent = t.totalLabel;
+      qs('#clearCartBtn').textContent = t.clearCartBtn;
+      qs('#modalCheckoutBtn').textContent = t.modalCheckoutBtn;
+
+      updateCartUI();
+    }
+
+    // ---------- EVENTS ----------
+    qsa('.addBtn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const lang = langSelect.value;
+        const t = i18n[lang];
+        const name = btn.dataset.name;
+        const price = Number(btn.dataset.price);
+        cart.push({name, price});
+        updateCartUI();
+        showToast(t.toastAdded(name, money.format(price)));
+      });
+    });
+
+    cartBtn.addEventListener('click', openCart);
+    cartClose.addEventListener('click', closeCart);
+    cartBackdrop.addEventListener('click', closeCart);
+    window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeCart(); });
+
+    clearCartBtn.addEventListener('click', ()=>{
+      const lang = langSelect.value;
+      cart = [];
+      updateCartUI();
+      showToast(i18n[lang].toastCleared);
+    });
+
+    toastBtn.addEventListener('click', ()=>{
+      const lang = langSelect.value;
+      showToast(i18n[lang].toastBonus);
+    });
+
+    scrollOfferBtn.addEventListener('click', ()=>{
+      document.getElementById('offer').scrollIntoView({behavior:'smooth'});
+    });
+
+    checkoutBtn.addEventListener('click', ()=>{
+      const lang = langSelect.value;
+      if(cart.length === 0){
+        showToast(i18n[lang].toastEmpty);
+        return;
+      }
+      openCart();
+    });
+
+    modalCheckoutBtn.addEventListener('click', ()=>{
+      const lang = langSelect.value;
+      if(cart.length === 0){
+        showToast(i18n[lang].toastEmpty);
+        return;
+      }
+      const total = cart.reduce((s, x)=> s + x.price, 0);
+      showToast(i18n[lang].toastOrdered(money.format(total)));
+      closeCart();
+    });
+
+    langSelect.addEventListener('change', ()=>{
+      localStorage.setItem('lang', langSelect.value);
+      setLang(langSelect.value);
+    });
+
+    // ---------- INIT ----------
+    updatePrices();
+    const savedLang = localStorage.getItem('lang') || 'pl';
+    langSelect.value = savedLang;
+    setLang(savedLang);
+    updateCartUI();
+  </script>
+</body>
+</html>
